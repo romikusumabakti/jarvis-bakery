@@ -1,31 +1,22 @@
 import {
-  Button,
-  IconButton,
-  Paper,
-  Snackbar,
-  Stack,
+  Paper, Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import {
-  AddOutlined,
-  CloseOutlined,
-  RemoveOutlined,
-  ShoppingBagOutlined,
+  ShoppingBagOutlined
 } from '@material-ui/icons';
-import {useEffect, useState} from 'react';
-import {api} from '../utils/api';
-import {formatDate, formatNumber, formatTime} from '../utils/formatter';
+import { useEffect, useState } from 'react';
+import { api } from '../utils/api';
+import { formatDate, formatNumber, formatTime } from '../utils/formatter';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
-  const [notification, setNotification] = useState();
 
   useEffect(() => {
     api('/orders')
@@ -34,15 +25,6 @@ function Orders() {
         setOrders(json.data);
       });
   }, []);
-
-  const checkout = () => {
-    api('/orders', 'POST')
-      .then((response) => response.json())
-      .then((json) => {
-        setNotification('Berhasil checkout.');
-        setOrders([]);
-      });
-  };
 
   return (
     <Stack p={2} gap={2}>
@@ -92,21 +74,6 @@ function Orders() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Snackbar
-        open={notification}
-        autoHideDuration={2750}
-        onClose={() => setNotification(null)}
-        message={notification}
-        action={
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={() => setNotification(null)}>
-            <CloseOutlined />
-          </IconButton>
-        }
-      />
     </Stack>
   );
 }

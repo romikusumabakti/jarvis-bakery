@@ -1,18 +1,21 @@
 import {
+  CircularProgress,
   Container,
   CssBaseline,
   Divider,
   ThemeProvider,
 } from '@material-ui/core';
-import {createContext, useState} from 'react';
+import {createContext, lazy, Suspense, useState} from 'react';
 import {BrowserRouter, Redirect, Route} from 'react-router-dom';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import useTheme from './hooks/useTheme';
-import Cart from './pages/Cart';
-import Orders from './pages/Orders';
-import Products from './pages/Products';
+
+const Products = lazy(() => import('./pages/Products'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Orders = lazy(() => import('./pages/Orders'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 
 export const AuthContext = createContext();
 export const ThemeContext = createContext();
@@ -29,15 +32,20 @@ function App() {
             <CssBaseline />
             <Header />
             <Container>
-              <Route exact path="/">
-                <Products />
-              </Route>
-              <Route path="/cart">
-                {user ? <Cart /> : <Redirect to="/" />}
-              </Route>
-              <Route path="/orders">
-                {user ? <Orders /> : <Redirect to="/" />}
-              </Route>
+              <Suspense fallback={<CircularProgress />}>
+                <Route exact path="/">
+                  <Products />
+                </Route>
+                <Route path="/cart">
+                  {user ? <Cart /> : <Redirect to="/" />}
+                </Route>
+                <Route path="/orders">
+                  {user ? <Orders /> : <Redirect to="/" />}
+                </Route>
+                <Route path="/notifications">
+                  {user ? <Notifications /> : <Redirect to="/" />}
+                </Route>
+              </Suspense>
             </Container>
             <Divider />
             <Footer />
