@@ -36,7 +36,7 @@ function NavTabs(props) {
           key={page.path}
           label={page.title}
           value={page.path}
-          component={Link}
+          component={(user || !page.restricted) && Link}
           to={(user || !page.restricted) && page.path}
           onClick={!user && page.restricted && (() => props.setLoginOpen(true))}
         />

@@ -1,4 +1,4 @@
-import {AppBar, Button, IconButton, Stack, Toolbar} from '@material-ui/core';
+import {AppBar, Button, IconButton, Stack, Toolbar, Tooltip} from '@material-ui/core';
 import {MenuOutlined, ShoppingCartOutlined} from '@material-ui/icons';
 import {useContext, useState} from 'react';
 import {Link} from 'react-router-dom';
@@ -25,9 +25,14 @@ function Header() {
         <NavTabs sx={{flexGrow: 1}} setLoginOpen={setLoginOpen} />
         <Stack direction="row" gap={2} alignItems="center">
           <ThemeToggle />
-          <IconButton component={Link} to="/cart">
-            <ShoppingCartOutlined />
-          </IconButton>
+          <Tooltip title="Buka keranjang">
+            <IconButton
+              component={user && Link}
+              to={user && '/cart'}
+              onClick={!user && (() => setLoginOpen(true))}>
+              <ShoppingCartOutlined />
+            </IconButton>
+          </Tooltip>
           {user ? (
             <AccountMenu />
           ) : (
