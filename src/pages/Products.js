@@ -9,11 +9,13 @@ import {
   Typography,
 } from '@material-ui/core';
 import {CategoryOutlined} from '@material-ui/icons';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import { NotificationContext } from '../App';
 import {api, jsonApi} from '../utils/api';
 import {formatNumber} from '../utils/formatter';
 
 function Products() {
+  const setNotification = useContext(NotificationContext);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -26,9 +28,11 @@ function Products() {
     jsonApi('/carts', 'POST', {
       product_id: id,
       quantity: 1,
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+    }).then((response) => {
+      if (response.ok) {
+        setNotification('Produk ditambahkan ke keranjang.');
+      }
+    });
   };
 
   return (

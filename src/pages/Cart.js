@@ -19,7 +19,7 @@ import {
 } from '@material-ui/icons';
 import {useContext, useEffect, useState} from 'react';
 import {NotificationContext} from '../App';
-import {api} from '../utils/api';
+import {api, jsonApi} from '../utils/api';
 import {formatNumber} from '../utils/formatter';
 
 function Cart() {
@@ -33,6 +33,30 @@ function Cart() {
         setCarts(json.data);
       });
   }, []);
+
+  const setQuantity = (id, quantity) => {
+    if (quantity !== 0) {
+      jsonApi(`/carts/${id}`, 'PUT', {
+        product_id: id,
+        quantity: quantity,
+      }).then((response) => {
+        if (response.ok) {
+          setCarts(
+            carts.map((cart) =>
+              cart.id === id ? {...cart, quantity: quantity} : cart
+            )
+          );
+        }
+      });
+    } else {
+      api(`/carts/${id}`, 'DELETE').then((response) => {
+        if (response.ok) {
+          setCarts(carts.filter((cart) => cart.id !== id));
+          setNotification('Produk dihapus dari keranjang.');
+        }
+      });
+    }
+  };
 
   const checkout = () => {
     api('/orders', 'POST').then((response) => {
@@ -70,21 +94,23 @@ function Cart() {
           <TableBody>
             {carts.map((cart) => (
               <TableRow key={cart.id}>
-                <TableCell>{cart.product?.name}</TableCell>
-                <TableCell>Rp{formatNumber(cart.product?.price)}</TableCell>
+                <TableCell>{cart.product.name}</TableCell>
+                <TableCell>Rp{formatNumber(cart.product.price)}</TableCell>
                 <TableCell>{cart.quantity}</TableCell>
                 <TableCell>
-                  Rp{formatNumber(cart.product?.price * cart.quantity)}
+                  Rp{formatNumber(cart.product.price * cart.quantity)}
                 </TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1} justifyContent="flex-end">
                     <Tooltip title="Tambah">
-                      <IconButton>
+                      <IconButton
+                        onClick={() => setQuantity(cart.id, cart.quantity + 1)}>
                         <AddOutlined />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Kurangi">
-                      <IconButton>
+                      <IconButton
+                        onClick={() => setQuantity(cart.id, cart.quantity - 1)}>
                         <RemoveOutlined />
                       </IconButton>
                     </Tooltip>
