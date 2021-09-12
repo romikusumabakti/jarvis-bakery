@@ -37,10 +37,11 @@ function Cart() {
 
   const checkout = () => {
     api('/orders', 'POST')
-      .then((response) => response.json())
-      .then((json) => {
-        setNotification('Berhasil checkout.');
-        setCarts([]);
+      .then((response) => {
+        if (response.ok) {
+          setNotification('Berhasil checkout.');
+          setCarts([]);
+        }
       });
   };
 

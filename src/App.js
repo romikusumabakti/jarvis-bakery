@@ -5,12 +5,13 @@ import {
   Divider,
   ThemeProvider,
 } from '@material-ui/core';
-import {createContext, lazy, Suspense, useState} from 'react';
+import {createContext, lazy, Suspense, useEffect, useState} from 'react';
 import {BrowserRouter, Redirect, Route} from 'react-router-dom';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import useTheme from './hooks/useTheme';
+import { api } from './utils/api';
 
 const Products = lazy(() => import('./pages/Products'));
 const Cart = lazy(() => import('./pages/Cart'));
@@ -23,6 +24,16 @@ export const ThemeContext = createContext();
 function App() {
   const [user, setUser] = useState();
   const {theme, mode, setMode} = useTheme();
+
+  useEffect(async () => {
+    if (localStorage.getItem('token')) {
+      const response = await api('/auth/me');
+      if (response.ok) {
+        const user = await response.json();
+        setUser(user);
+      }
+    }
+  }, []);
 
   return (
     <BrowserRouter>

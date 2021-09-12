@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useTheme,
 } from '@material-ui/core';
 import {NotificationsOutlined} from '@material-ui/icons';
 import {useEffect, useState} from 'react';
@@ -16,6 +17,7 @@ import {api} from '../utils/api';
 import {formatDate, formatTime} from '../utils/formatter';
 
 function Notifications() {
+  const theme = useTheme();
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -25,6 +27,14 @@ function Notifications() {
         setNotifications(json.data);
       });
   }, []);
+
+  const setAsRead = (id) => {
+    api(`/notifications/${id}`, 'PUT').then((response) => {
+      if (response.ok) {
+        alert('Berhasil');
+      }
+    });
+  };
 
   return (
     <Stack p={2} gap={2}>
@@ -44,12 +54,27 @@ function Notifications() {
           </TableHead>
           <TableBody>
             {notifications.map((notification) => (
-              <TableRow key={notification.id}>
-                <TableCell>{formatDate(notification.date)}</TableCell>
-                <TableCell>{formatTime(notification.date)} WIB</TableCell>
+              <TableRow
+                key={notification.id}
+                sx={
+                  notification.status === 1 && {
+                    '& td': {
+                      color: theme.palette.text.secondary,
+                    },
+                  }
+                }>
+                <TableCell>{formatDate(notification.createdAt)}</TableCell>
+                <TableCell>{formatTime(notification.createdAt)} WIB</TableCell>
                 <TableCell>{notification.message}</TableCell>
                 <TableCell align="right">
-                  <Button variant="contained">Tandai sudah dibaca</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => setAsRead(notification.id)}
+                    disabled={notification.status === 1}>
+                    {notification.status === 0
+                      ? 'Tandai sudah dibaca'
+                      : 'Sudah dibaca'}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

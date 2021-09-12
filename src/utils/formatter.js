@@ -10,12 +10,12 @@ export const formatDate = (date) => {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-  }).format(date);
+  }).format(new Date(date));
 };
 
 export const formatTime = (date) => {
   return new Intl.DateTimeFormat('id-ID', {
     hour: 'numeric',
     minute: 'numeric',
-  }).format(date);
+  }).format(new Date(date));
 };

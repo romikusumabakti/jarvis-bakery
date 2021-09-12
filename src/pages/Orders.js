@@ -47,8 +47,8 @@ function Orders() {
           <TableBody>
             {orders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell>{formatDate(order.date)}</TableCell>
-                <TableCell>{formatTime(order.date)} WIB</TableCell>
+                <TableCell>{formatDate(order.createdAt)}</TableCell>
+                <TableCell>{formatTime(order.createdAt)} WIB</TableCell>
                 <TableCell>
                   <ul>
                     {order.carts.map((cart) => (
