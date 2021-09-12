@@ -17,7 +17,7 @@ export const AuthContext = createContext();
 export const ThemeContext = createContext();
 
 function App() {
-  const {user, setUser} = useState({});
+  const [user, setUser] = useState({});
   const {theme, mode, setMode} = useTheme();
 
   return (
