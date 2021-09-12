@@ -1,11 +1,12 @@
-import {Button, Dialog, Stack, TextField, Typography} from '@material-ui/core';
-import {useContext, useState} from 'react';
-import { AuthContext } from '../App';
-import {api, jsonApi} from '../utils/api';
+import { Button, Dialog, Stack, TextField, Typography } from '@material-ui/core';
+import { useContext, useState } from 'react';
+import { AuthContext, NotificationContext } from '../App';
+import { jsonApi } from '../utils/api';
 import JarvisBakeryLogo from './JarvisBakeryLogo';
 
 function Login(props) {
-  const {user, setUser} = useContext(AuthContext);
+  const {setUser} = useContext(AuthContext);
+  const setNotification = useContext(NotificationContext);
   const [loginData, setLoginData] = useState({});
   const [loginErrors, setLoginErrors] = useState({});
 
@@ -22,6 +23,7 @@ function Login(props) {
       const json = await response.json();
       setUser(json.data);
       localStorage.setItem('token', json.data.token);
+      setNotification('Login berhasil');
       handleClose();
     } else {
       const json = await response.json();
@@ -33,7 +35,7 @@ function Login(props) {
     }
   };
 
-  const handleClose = (event) => {
+  const handleClose = () => {
     props.onClose();
     setLoginErrors({});
   };

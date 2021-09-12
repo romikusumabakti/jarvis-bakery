@@ -12,12 +12,14 @@ import {
   useTheme,
 } from '@material-ui/core';
 import {NotificationsOutlined} from '@material-ui/icons';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {NotificationContext} from '../App';
 import {api} from '../utils/api';
 import {formatDate, formatTime} from '../utils/formatter';
 
 function Notifications() {
   const theme = useTheme();
+  const setNotification = useContext(NotificationContext);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -31,7 +33,12 @@ function Notifications() {
   const setAsRead = (id) => {
     api(`/notifications/${id}`, 'PUT').then((response) => {
       if (response.ok) {
-        alert('Berhasil');
+        setNotifications(
+          notifications.map((notification) =>
+            notification.id === id ? {...notification, status: 1} : notification
+          )
+        );
+        setNotification('Notifikasi ditandai sudah dibaca.');
       }
     });
   };

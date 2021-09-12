@@ -2,7 +2,6 @@ import {
   Button,
   IconButton,
   Paper,
-  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -15,17 +14,17 @@ import {
 } from '@material-ui/core';
 import {
   AddOutlined,
-  CloseOutlined,
   RemoveOutlined,
   ShoppingCartOutlined,
 } from '@material-ui/icons';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {NotificationContext} from '../App';
 import {api} from '../utils/api';
 import {formatNumber} from '../utils/formatter';
 
 function Cart() {
   const [carts, setCarts] = useState([]);
-  const [notification, setNotification] = useState();
+  const setNotification = useContext(NotificationContext);
 
   useEffect(() => {
     api('/carts')
@@ -36,13 +35,12 @@ function Cart() {
   }, []);
 
   const checkout = () => {
-    api('/orders', 'POST')
-      .then((response) => {
-        if (response.ok) {
-          setNotification('Berhasil checkout.');
-          setCarts([]);
-        }
-      });
+    api('/orders', 'POST').then((response) => {
+      if (response.ok) {
+        setNotification('Berhasil checkout.');
+        setCarts([]);
+      }
+    });
   };
 
   return (
@@ -97,21 +95,6 @@ function Cart() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Snackbar
-        open={notification}
-        autoHideDuration={2750}
-        onClose={() => setNotification(null)}
-        message={notification}
-        action={
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={() => setNotification(null)}>
-            <CloseOutlined />
-          </IconButton>
-        }
-      />
     </Stack>
   );
 }

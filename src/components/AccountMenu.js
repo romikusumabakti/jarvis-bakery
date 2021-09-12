@@ -39,7 +39,7 @@ function AccountMenu() {
       <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
         <Tooltip title={'Akun JarvisLeave (' + user.name + ')'}>
           <IconButton onClick={handleClick} size="small">
-            <Avatar alt={user.nama} />
+            <Avatar alt={user.name} />
           </IconButton>
         </Tooltip>
       </Box>
