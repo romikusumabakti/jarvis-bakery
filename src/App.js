@@ -5,19 +5,20 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import {createContext, useState} from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route} from 'react-router-dom';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import useTheme from './hooks/useTheme';
 import Cart from './pages/Cart';
+import Orders from './pages/Orders';
 import Products from './pages/Products';
 
 export const AuthContext = createContext();
 export const ThemeContext = createContext();
 
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const {theme, mode, setMode} = useTheme();
 
   return (
@@ -32,9 +33,11 @@ function App() {
                 <Products />
               </Route>
               <Route path="/cart">
-                <Cart />
+                {user ? <Cart /> : <Redirect to="/" />}
               </Route>
-              <Route path="/transactions">Transaksi</Route>
+              <Route path="/orders">
+                {user ? <Orders /> : <Redirect to="/" />}
+              </Route>
             </Container>
             <Divider />
             <Footer />

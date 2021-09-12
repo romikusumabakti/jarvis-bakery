@@ -17,21 +17,21 @@ import {
   AddOutlined,
   CloseOutlined,
   RemoveOutlined,
-  ShoppingCartOutlined,
+  ShoppingBagOutlined,
 } from '@material-ui/icons';
 import {useEffect, useState} from 'react';
 import {api} from '../utils/api';
-import {formatNumber} from '../utils/formatter';
+import {formatDate, formatNumber, formatTime} from '../utils/formatter';
 
-function Cart() {
-  const [carts, setCarts] = useState([]);
+function Orders() {
+  const [orders, setOrders] = useState([]);
   const [notification, setNotification] = useState();
 
   useEffect(() => {
-    api('/carts')
+    api('/orders')
       .then((response) => response.json())
       .then((json) => {
-        setCarts(json.data);
+        setOrders(json.data);
       });
   }, []);
 
@@ -40,57 +40,53 @@ function Cart() {
       .then((response) => response.json())
       .then((json) => {
         setNotification('Berhasil checkout.');
-        setCarts([]);
+        setOrders([]);
       });
   };
 
   return (
     <Stack p={2} gap={2}>
       <Stack direction="row" alignItems="center" gap={1}>
-        <ShoppingCartOutlined />
-        <Typography variant="h5">Keranjang</Typography>
+        <ShoppingBagOutlined />
+        <Typography variant="h5">Pesanan</Typography>
       </Stack>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Produk</TableCell>
-              <TableCell>Harga</TableCell>
+              <TableCell>Tanggal</TableCell>
+              <TableCell>Waktu</TableCell>
+              <TableCell>Item</TableCell>
               <TableCell>Jumlah</TableCell>
               <TableCell>Total bayar</TableCell>
-              <TableCell align="right">
-                <Button
-                  variant="contained"
-                  onClick={checkout}
-                  disabled={carts.length === 0}>
-                  Checkout
-                </Button>
-              </TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {carts.map((cart) => (
-              <TableRow key={cart.id}>
-                <TableCell>{cart.product?.name}</TableCell>
-                <TableCell>Rp{formatNumber(cart.product?.price)}</TableCell>
-                <TableCell>{cart.quantity}</TableCell>
+            {orders.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>{formatDate(order.date)}</TableCell>
+                <TableCell>{formatTime(order.date)} WIB</TableCell>
                 <TableCell>
-                  Rp{formatNumber(cart.product?.price * cart.quantity)}
+                  <ul>
+                    {order.carts.map((cart) => (
+                      <li key={cart.id}>{cart.product.name}</li>
+                    ))}
+                  </ul>
                 </TableCell>
                 <TableCell>
-                  <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    <Tooltip title="Tambah">
-                      <IconButton>
-                        <AddOutlined />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Kurangi">
-                      <IconButton>
-                        <RemoveOutlined />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
+                  {order.carts.reduce((acc, cart) => acc + cart.quantity, 0)}
                 </TableCell>
+                <TableCell>
+                  Rp
+                  {formatNumber(
+                    order.carts.reduce(
+                      (acc, cart) => acc + cart.quantity * cart.product.price,
+                      0
+                    )
+                  )}
+                </TableCell>
+                <TableCell>{order.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -115,4 +111,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default Orders;

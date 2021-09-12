@@ -11,8 +11,8 @@ const pages = [
     path: '/cart',
   },
   {
-    title: 'Transaksi',
-    path: '/transactions',
+    title: 'Pesanan',
+    path: '/orders',
   },
   {
     title: 'Notifikasi',

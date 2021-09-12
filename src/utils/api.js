@@ -14,7 +14,7 @@ export async function jsonApi(url, method, bodyJson) {
   return await fetch('http://localhost:3200' + url, {
     method: method,
     headers: {
-      Authorization: 'Bearer ' + token,
+      Authorization: token,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(bodyJson),

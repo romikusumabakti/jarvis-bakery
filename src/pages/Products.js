@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import {CategoryOutlined} from '@material-ui/icons';
 import {useEffect, useState} from 'react';
-import {api} from '../utils/api';
-import { formatNumber } from '../utils/formatter';
+import {api, jsonApi} from '../utils/api';
+import {formatNumber} from '../utils/formatter';
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -21,6 +21,15 @@ function Products() {
       .then((response) => response.json())
       .then((json) => setProducts(json.data));
   }, []);
+
+  const addToCart = (id) => {
+    jsonApi('/carts', 'POST', {
+      product_id: id,
+      quantity: 1,
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  };
 
   return (
     <Stack p={2} gap={2}>
@@ -46,7 +55,9 @@ function Products() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Tambahkan ke keranjang</Button>
+                <Button size="small" onClick={() => addToCart(product.id)}>
+                  Tambahkan ke keranjang
+                </Button>
               </CardActions>
             </Card>
           </Grid>
