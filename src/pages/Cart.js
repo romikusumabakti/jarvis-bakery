@@ -29,9 +29,7 @@ function Cart() {
   useEffect(() => {
     api('/carts')
       .then((response) => response.json())
-      .then((json) => {
-        setCarts(json.data);
-      });
+      .then((json) => setCarts(json.data));
   }, []);
 
   const setQuantity = (id, quantity) => {

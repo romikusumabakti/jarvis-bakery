@@ -1,7 +1,7 @@
-import { Button, Dialog, Stack, TextField, Typography } from '@material-ui/core';
-import { useContext, useState } from 'react';
-import { AuthContext, NotificationContext } from '../App';
-import { jsonApi } from '../utils/api';
+import {Button, Dialog, Stack, TextField, Typography} from '@material-ui/core';
+import {useContext, useState} from 'react';
+import {AuthContext, NotificationContext} from '../App';
+import {jsonApi} from '../utils/api';
 import JarvisBakeryLogo from './JarvisBakeryLogo';
 
 function Login(props) {
@@ -18,13 +18,14 @@ function Login(props) {
 
   const login = async (event) => {
     event.preventDefault();
-    const response = await jsonApi('/auth/signin', 'POST', loginData)
+    const response = await jsonApi('/auth/signin', 'POST', loginData);
     if (response.ok) {
       const json = await response.json();
       setUser(json.data);
       localStorage.setItem('token', json.data.token);
       setNotification('Login berhasil');
       handleClose();
+      document.activeElement.click();
     } else {
       const json = await response.json();
       if (json.messages === 'User tidak terdaftar') {

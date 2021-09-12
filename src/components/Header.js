@@ -22,7 +22,7 @@ function Header() {
         <Button component={Link} to="/">
           <JarvisBakeryLogo />
         </Button>
-        <NavTabs sx={{flexGrow: 1}} />
+        <NavTabs sx={{flexGrow: 1}} setLoginOpen={setLoginOpen} />
         <Stack direction="row" gap={2} alignItems="center">
           <ThemeToggle />
           <IconButton component={Link} to="/cart">

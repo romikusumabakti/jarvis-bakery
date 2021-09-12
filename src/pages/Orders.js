@@ -1,19 +1,18 @@
 import {
-  Paper, Stack,
+  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@material-ui/core';
-import {
-  ShoppingBagOutlined
-} from '@material-ui/icons';
-import { useEffect, useState } from 'react';
-import { api } from '../utils/api';
-import { formatDate, formatNumber, formatTime } from '../utils/formatter';
+import {ShoppingBagOutlined} from '@material-ui/icons';
+import {useEffect, useState} from 'react';
+import {api} from '../utils/api';
+import {formatDate, formatNumber, formatTime} from '../utils/formatter';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -21,9 +20,7 @@ function Orders() {
   useEffect(() => {
     api('/orders')
       .then((response) => response.json())
-      .then((json) => {
-        setOrders(json.data);
-      });
+      .then((json) => setOrders(json.data));
   }, []);
 
   return (

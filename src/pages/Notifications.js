@@ -25,9 +25,7 @@ function Notifications() {
   useEffect(() => {
     api('/notifications')
       .then((response) => response.json())
-      .then((json) => {
-        setNotifications(json.data);
-      });
+      .then((json) => setNotifications(json.data));
   }, []);
 
   const setAsRead = (id) => {

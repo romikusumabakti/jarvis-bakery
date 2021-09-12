@@ -39,6 +39,8 @@ function App() {
           setUser(null);
         }
       });
+    } else {
+      setUser(null);
     }
   }, []);
 
