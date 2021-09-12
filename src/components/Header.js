@@ -10,7 +10,7 @@ import NavTabs from './NavTabs';
 import ThemeToggle from './ThemeToggle';
 
 function Header() {
-  const {user, setUser} = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
   const [loginOpen, setLoginOpen] = useState(false);
 
   return (

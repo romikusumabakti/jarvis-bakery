@@ -26,7 +26,7 @@ export const ThemeContext = createContext();
 export const NotificationContext = createContext();
 
 function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
   const {theme, mode, setMode} = useTheme();
   const [notification, setNotification] = useState();
 
@@ -35,6 +35,8 @@ function App() {
       api('/auth/me').then((response) => {
         if (response.ok) {
           response.json().then((json) => setUser(json.data));
+        } else {
+          setUser(null);
         }
       });
     }

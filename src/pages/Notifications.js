@@ -64,11 +64,13 @@ function Notifications() {
               <TableRow
                 key={notification.id}
                 sx={
-                  notification.status === 1 && {
-                    '& td': {
-                      color: theme.palette.text.secondary,
-                    },
-                  }
+                  notification.status === 1
+                    ? {
+                        '& td': {
+                          color: theme.palette.text.secondary,
+                        },
+                      }
+                    : null
                 }>
                 <TableCell>{formatDate(notification.createdAt)}</TableCell>
                 <TableCell>{formatTime(notification.createdAt)} WIB</TableCell>
